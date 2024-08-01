@@ -2,7 +2,7 @@
 
 a shell-like blog for fans of unix.
 
-https://github.com/r1cardohj/shell-blog/media/show.mp4
+https://github.com/user-attachments/assets/fe1c4f4e-9c0b-4248-8c85-7bac167b192c
 
 ## todo
 
