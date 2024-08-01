@@ -1,0 +1,20 @@
+body {
+    background-color: #000000;
+    font-size: 21px;
+    color: whitesmoke;
+    font-family: Consolas,sans-serif;
+}
+
+.input-position {
+    background-color: #0000;
+    color: whitesmoke;
+    caret-color: greenyellow;
+    border: 0;
+    font-size: 21px;
+    outline: none;
+    font-family: Consolas,sans-serif;
+    margin-left: 5px;
+    width: 80%;
+    height: 26;
+    display: inline-block;
+}
