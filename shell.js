@@ -41,7 +41,7 @@ function new_line_ask() {
     let new_input = document.createElement("input")
     new_input.classList.add("input-position")
     new_input.setAttribute("type", "text")
-    new_line_p.append(render$("~"), new_input)
+    new_line_p.append(render_home(), new_input)
     shell.appendChild(new_line_p)
     new_input.addEventListener("keydown", (event) => {
          if (event.key == "Enter") {
@@ -69,6 +69,9 @@ function handle_command(cmd) {
         case "about":
             about()
             break
+        case "clear":
+            clear()
+            break
     }
 }
 
@@ -88,6 +91,14 @@ function whoami() {
 
 function about() {
     new_line_resp("这是一个博客的demo,我在考虑是用纯js实现一个静态页面还是前后端分离.")
+}
+
+function clear() {
+    document.body.innerHTML = ""
+    shell = document.createElement("div")
+    shell.id = "shell"
+    document.body.appendChild(shell)
+    //new_line_ask()
 }
 
 
