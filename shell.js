@@ -6,7 +6,9 @@
 
 
 const context = {
-    line: 0
+    line: 0,
+    current_path: "~",
+    history_commands: []
 }
 
 const COMMAND_LINE_$ = "r1cardohj@blog:"
