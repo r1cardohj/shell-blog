@@ -23,19 +23,13 @@ function enter_callback(cmd) {
 }
 
 function init() {
-    const input = document.getElementsByClassName("input-position")[lines]
-    input.addEventListener("keydown", (event) => {
-        if (event.key == "Enter") {
-            input.blur()
-            enter_callback(input.value)
-        }
-    })
-    input.focus()
-
+    new_line_ask()
 }
 
 function disable_last_input() {
-    document.getElementsByClassName("input-position")[lines].disable = true
+    last_input = document.getElementsByClassName("input-position")[lines]
+    if (last_input)
+        last_input.disabled = true
 }
 
 function new_line_ask() {
