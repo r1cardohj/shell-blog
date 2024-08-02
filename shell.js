@@ -4,7 +4,10 @@
  * LISENCE: MIT
  */
 
-let lines = 0
+
+const context = {
+    line: 0
+}
 
 const COMMAND_LINE_$ = "r1cardohj@blog:"
 
@@ -27,17 +30,17 @@ function init() {
 }
 
 function disable_last_input() {
-    last_input = document.getElementsByClassName("input-position")[lines]
+    last_input = document.getElementsByClassName("input-position")[context.line]
     if (last_input)
         last_input.disabled = true
 }
 
 function new_line_ask() {
     disable_last_input()
-    lines++
+    context.line++
     let shell = document.getElementById("shell")
     let new_line_p = document.createElement("p")
-    new_line_p.id = "cmd-" + lines;
+    new_line_p.id = "cmd-" + context.line;
     let new_input = document.createElement("input")
     new_input.classList.add("input-position")
     new_input.setAttribute("type", "text")
