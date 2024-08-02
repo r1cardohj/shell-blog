@@ -5,6 +5,12 @@ body {
     font-family: Consolas,sans-serif;
 }
 
+p {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
 .input-position {
     background-color: #0000;
     color: whitesmoke;
