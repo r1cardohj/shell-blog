@@ -3,12 +3,15 @@
  * Date: 20240802
  * LISENCE: MIT
  */
-
+import configs from "./configs.js";
 
 const context = {
     line: -1,
     current_path: "~",
-    history_commands: []
+    history_commands: [],
+    current_user: configs.user_name,
+    host_name: configs.host_name,
+    history_commands_ptr:-1 
 }
 
 const defaultCommands = [
@@ -18,8 +21,7 @@ const defaultCommands = [
     clear
 ]
 
-
-const COMMAND_LINE_$ = "r1cardohj@blog:"
+const COMMAND_LINE_$ = `${context.current_user}@${context.host_name}` 
 
 function render$(path) {
     return `${COMMAND_LINE_$}${path}$`;
@@ -39,7 +41,7 @@ function enter_callback(cmd) {
 }
 
 function tab_callback(cmd) {
-    arr = cmd.split(" ")
+    const arr = cmd.split(" ")
     if (arr.length > 1) {
         prompt_args(cmd)
     } else {
@@ -47,9 +49,24 @@ function tab_callback(cmd) {
     }
 }
 
+function arrow_up_callback()  {
+    if (context.history_commands_ptr > 0) {
+        context.history_commands_ptr--
+        get_current_input().value = context.history_commands[context.history_commands_ptr]
+    }
+
+}
+
+function arrow_down_callback() {
+    if ( context.history_commands_ptr < context.history_commands.length - 1) {
+        context.history_commands_ptr++
+        get_current_input().value = context.history_commands[context.history_commands_ptr]
+    }
+}
+
 function prompt_command(cmd) {
     for(let idx in defaultCommands) {
-        command_name = defaultCommands[idx].name
+        const command_name = defaultCommands[idx].name
         if (command_name.startsWith(cmd) && command_name != cmd)
             get_current_input().value = command_name
     }
@@ -65,7 +82,7 @@ function init() {
 }
 
 function disable_last_input() {
-    last_input = document.getElementsByClassName("input-position")[context.line-1]
+    let last_input = document.getElementsByClassName("input-position")[context.line-1]
     if (last_input)
         last_input.disabled = true
 }
@@ -90,6 +107,11 @@ function new_line_ask() {
          } else if (event.key == "Tab") {
             event.preventDefault()
             tab_callback(new_input.value)
+         } else if (event.key == "ArrowUp") {
+            event.preventDefault()
+            arrow_up_callback()
+         } else if (event.key == "ArrowDown") {
+            arrow_down_callback()
          }
     })
     new_input.focus()
@@ -104,20 +126,13 @@ function new_line_resp(content) {
 }
 
 function handle_command(cmd) {
-    switch(cmd) {
-        case "ls":
-            ls()
-            break
-        case "whoami":
-            whoami()
-            break
-        case "about":
-            about()
-            break
-        case "clear":
-            clear()
-            break
+    for(let i in defaultCommands) {
+        if (cmd === defaultCommands[i].name) {
+            defaultCommands[i]()
+        }
     }
+    context.history_commands.push(cmd)
+    context.history_commands_ptr = context.history_commands.length;
 }
 
 /**
@@ -126,12 +141,12 @@ function handle_command(cmd) {
 
 function ls() {
     new_line_resp("total 2")
-    new_line_resp("-r--r--r--  1 r1cardohj r1cardohj 4009 May 19:43 About this blog")
+    new_line_resp("-r--r--r--  1 r1cardohj r1cardohj 4009 May 19:43 About-this-blog")
     new_line_resp("-r--r--r--  1 r1cardohj r1cardohj 4022 May 12:00 my-blog-2024")
 }
 
 function whoami() {
-    new_line_resp("r1cardohj")
+    new_line_resp(context.current_user)
 }
 
 function about() {
@@ -140,7 +155,7 @@ function about() {
 
 function clear() {
     document.body.innerHTML = ""
-    shell = document.createElement("div")
+    const shell = document.createElement("div")
     shell.id = "shell"
     document.body.appendChild(shell)
     context.line = -1
