@@ -6,10 +6,18 @@
 
 
 const context = {
-    line: 0,
+    line: -1,
     current_path: "~",
     history_commands: []
 }
+
+const defaultCommands = [
+    ls,
+    whoami,
+    about,
+    clear
+]
+
 
 const COMMAND_LINE_$ = "r1cardohj@blog:"
 
@@ -21,25 +29,53 @@ function render_home() {
     return render$("~")
 }
 
+/**
+ * keyborad callback
+ */
 
 function enter_callback(cmd) {
     handle_command(cmd)
     new_line_ask()
 }
 
+function tab_callback(cmd) {
+    arr = cmd.split(" ")
+    if (arr.length > 1) {
+        prompt_args(cmd)
+    } else {
+        prompt_command(cmd)
+    }
+}
+
+function prompt_command(cmd) {
+    for(let idx in defaultCommands) {
+        command_name = defaultCommands[idx].name
+        if (command_name.startsWith(cmd) && command_name != cmd)
+            get_current_input().value = command_name
+    }
+}
+
+function prompt_args(cmd) {
+    //todo
+}
+
+
 function init() {
     new_line_ask()
 }
 
 function disable_last_input() {
-    last_input = document.getElementsByClassName("input-position")[context.line]
+    last_input = document.getElementsByClassName("input-position")[context.line-1]
     if (last_input)
         last_input.disabled = true
 }
 
+function get_current_input() {
+    return document.getElementsByClassName("input-position")[context.line]
+}
+
 function new_line_ask() {
     disable_last_input()
-    context.line++
     let shell = document.getElementById("shell")
     let new_line_p = document.createElement("p")
     new_line_p.id = "cmd-" + context.line;
@@ -51,9 +87,13 @@ function new_line_ask() {
     new_input.addEventListener("keydown", (event) => {
          if (event.key == "Enter") {
              enter_callback(new_input.value)
+         } else if (event.key == "Tab") {
+            event.preventDefault()
+            tab_callback(new_input.value)
          }
     })
     new_input.focus()
+    context.line++
 }
 
 function new_line_resp(content) {
@@ -81,7 +121,7 @@ function handle_command(cmd) {
 }
 
 /**
- *Command
+ * Command define
  */
 
 function ls() {
@@ -103,6 +143,7 @@ function clear() {
     shell = document.createElement("div")
     shell.id = "shell"
     document.body.appendChild(shell)
+    context.line = -1
     //new_line_ask()
 }
 
