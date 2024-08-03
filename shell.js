@@ -131,8 +131,10 @@ function handle_command(cmd) {
             defaultCommands[i]()
         }
     }
-    context.history_commands.push(cmd)
-    context.history_commands_ptr = context.history_commands.length;
+    if (cmd !== "") {
+        context.history_commands.push(cmd)
+        context.history_commands_ptr = context.history_commands.length;
+    }
 }
 
 /**
